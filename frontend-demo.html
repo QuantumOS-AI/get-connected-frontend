@@ -1,0 +1,2430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Get Connected</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #8A2BE2;
+            --secondary: #FF1493;
+            --dark-primary: #6A1CB7;
+            --light-primary: #9D4EE9;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --background: #F9F9F9;
+            --white: #FFFFFF;
+            --light-gray: #EEEEEE;
+            --gray: #DDDDDD;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --info: #17a2b8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            overscroll-behavior-y: none;
+        }
+
+        .page {
+            display: none;
+            min-height: 100vh;
+            width: 100%;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .app-btn {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(138, 43, 226, 0.2);
+        }
+
+        .app-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(138, 43, 226, 0.3);
+        }
+
+        .app-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(138, 43, 226, 0.3);
+        }
+
+        .app-btn-outline {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            padding: 8px 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .app-btn-outline:hover {
+            background-color: rgba(138, 43, 226, 0.1);
+        }
+
+        .app-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--gray);
+            border-radius: 8px;
+            outline: none;
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+
+        .app-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(138, 43, 226, 0.2);
+        }
+
+        .dashboard-tile {
+            background-color: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            transition: all 0.3s ease;
+            height: 140px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dashboard-tile:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .dashboard-tile::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+        }
+
+        .hamburger-menu {
+            position: fixed;
+            top: 0;
+            left: -280px;
+            width: 280px;
+            height: 100vh;
+            background-color: var(--white);
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            transition: left 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .hamburger-menu.open {
+            left: 0;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .menu-icon {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .menu-icon span {
+            width: 100%;
+            height: 3px;
+            background-color: var(--primary);
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-icon.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .menu-icon.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-icon.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: -300px;
+            width: 280px;
+            background-color: var(--white);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            padding: 15px;
+            z-index: 1002;
+            transition: right 0.3s ease;
+        }
+
+        .notification.show {
+            right: 20px;
+        }
+
+        .job-card {
+            background-color: var(--white);
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+            padding: 16px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .job-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+        }
+
+        .status-badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: white;
+        }
+
+        .status-open {
+            background-color: var(--info);
+        }
+
+        .status-in-progress {
+            background-color: var(--warning);
+        }
+
+        .status-completed {
+            background-color: var(--success);
+        }
+
+        .status-delayed {
+            background-color: var(--danger);
+        }
+
+        .tab-container {
+            display: flex;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            border-bottom: 1px solid var(--gray);
+        }
+
+        .tab-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            position: relative;
+            white-space: nowrap;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .tab.active {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--primary);
+        }
+
+        .chart-container {
+            width: 100%;
+            height: 250px;
+            margin: 15px 0;
+            background-color: var(--white);
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+            padding: 10px;
+        }
+
+        .calendar-container {
+            width: 100%;
+            background-color: var(--white);
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .avatar-large {
+            width: 80px;
+            height: 80px;
+            font-size: 28px;
+        }
+
+        .contact-card {
+            background-color: var(--white);
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+            padding: 12px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .contact-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+        }
+
+        .menu-item {
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .menu-item:hover {
+            background-color: rgba(138, 43, 226, 0.1);
+        }
+
+        .menu-item i {
+            width: 24px;
+            margin-right: 10px;
+            color: var(--primary);
+        }
+
+        .calendar-day {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .calendar-day:hover {
+            background-color: rgba(138, 43, 226, 0.1);
+        }
+
+        .calendar-day.today {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .calendar-day.has-event {
+            border: 2px solid var(--primary);
+        }
+
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .typing-indicator span {
+            height: 8px;
+            width: 8px;
+            background-color: var(--gray);
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 5px;
+            animation: typing 1.3s infinite;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+            margin-right: 0;
+        }
+
+        @keyframes typing {
+            0% { transform: translateY(0px); background-color: var(--gray); }
+            25% { transform: translateY(-5px); background-color: var(--primary); }
+            50% { transform: translateY(0px); background-color: var(--gray); }
+        }
+
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 180px);
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            max-width: 80%;
+            padding: 10px 15px;
+            border-radius: 18px;
+            position: relative;
+            clear: both;
+        }
+
+        .message.user {
+            background-color: var(--light-primary);
+            color: white;
+            float: right;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message.bot {
+            background-color: var(--light-gray);
+            color: var(--text-primary);
+            float: left;
+            border-bottom-left-radius: 4px;
+        }
+
+        .ai-tile {
+            background: linear-gradient(135deg, #6A1CB7 0%, #9D4EE9 100%);
+        }
+
+        .jobs-tile {
+            background: linear-gradient(135deg, #FF1493 0%, #FF69B4 100%);
+        }
+
+        .estimates-tile {
+            background: linear-gradient(135deg, #9D4EE9 0%, #FF1493 100%);
+        }
+
+        .calendar-tile {
+            background: linear-gradient(135deg, #8A2BE2 0%, #9932CC 100%);
+        }
+
+        .ai-bot-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 25px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+            box-shadow: 0 4px 10px rgba(138, 43, 226, 0.3);
+        }
+
+        /* Loading animations */
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(138, 43, 226, 0.1);
+            border-left-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Hide scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--gray);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-secondary);
+        }
+
+        /* Form styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--white);
+            color: var(--text-primary);
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1010;
+            display: flex;
+            align-items: center;
+            transform: translateX(150%);
+            transition: transform 0.3s ease;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast-success {
+            border-left: 4px solid var(--success);
+        }
+
+        .toast-error {
+            border-left: 4px solid var(--danger);
+        }
+
+        .toast-warning {
+            border-left: 4px solid var(--warning);
+        }
+
+        .toast-info {
+            border-left: 4px solid var(--info);
+        }
+
+        /* Switch toggle */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--gray);
+            transition: .3s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--primary);
+        }
+
+        input:focus + .slider {
+            box-shadow: 0 0 1px var(--primary);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        /* Card hover effects */
+        .hover-card {
+            transition: all 0.3s ease;
+        }
+
+        .hover-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Statistics card */
+        .stat-card {
+            background-color: var(--white);
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 10px 0;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .stat-change {
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .stat-change.positive {
+            color: var(--success);
+        }
+
+        .stat-change.negative {
+            color: var(--danger);
+        }
+
+        /* Make colors more iOS-friendly */
+        .ios-bg {
+            background: rgba(245, 245, 247, 0.95);
+        }
+
+        .ios-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        /* Animations for page transitions */
+        .slide-in {
+            animation: slideIn 0.3s forwards;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .slide-out {
+            animation: slideOut 0.3s forwards;
+        }
+
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(-100%); opacity: 0; }
+        }
+
+        /* Responsive adjustments for iOS */
+        @media (max-width: 767px) {
+            .container {
+                padding-left: 15px;
+                padding-right: 15px;
+            }
+
+            .dashboard-tile {
+                height: 120px;
+            }
+
+            .form-group {
+                margin-bottom: 15px;
+            }
+
+            .app-input {
+                padding: 10px 14px;
+                font-size: 16px; /* iOS optimal input size */
+            }
+
+            .app-btn {
+                padding: 12px 20px;
+                font-size: 16px; /* iOS optimal button text size */
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <i class="fas fa-check-circle mr-2"></i>
+        <span id="toast-message">Operation successful!</span>
+    </div>
+
+    <!-- Overlay -->
+    <div id="overlay" class="overlay"></div>
+
+    <!-- Hamburger Menu -->
+    <div id="hamburger-menu" class="hamburger-menu">
+        <div class="p-4 gradient-bg text-white">
+            <div class="flex items-center mb-4">
+                <div id="profile-avatar" class="avatar avatar-large">GC</div>
+                <div class="ml-4">
+                    <h3 id="menu-username" class="text-lg font-semibold">User Name</h3>
+                    <p id="menu-company" class="text-sm opacity-80">Company Name</p>
+                </div>
+            </div>
+        </div>
+        <div class="mt-2">
+            <div class="menu-item" onclick="navigateTo('dashboard')">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </div>
+            <div class="menu-item" onclick="navigateTo('profile')">
+                <i class="fas fa-user"></i>
+                <span>Profile</span>
+            </div>
+            <div class="menu-item" onclick="navigateTo('company')">
+                <i class="fas fa-building"></i>
+                <span>Company Settings</span>
+            </div>
+            <div class="menu-item" onclick="navigateTo('password')">
+                <i class="fas fa-lock"></i>
+                <span>Change Password</span>
+            </div>
+            <div class="menu-item" onclick="navigateTo('timezone')">
+                <i class="fas fa-globe"></i>
+                <span>Set Time Zone</span>
+            </div>
+            <div class="menu-item" onclick="navigateTo('notifications')">
+                <i class="fas fa-bell"></i>
+                <span>Notifications</span>
+            </div>
+            <div class="menu-item" id="logout-btn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Page -->
+    <div id="login-page" class="page active">
+        <div class="min-h-screen flex flex-col items-center justify-center p-4">
+            <div class="w-full max-w-md bg-white rounded-lg shadow-lg p-8 ios-card">
+                <div class="text-center mb-8">
+                    <h1 class="text-3xl font-bold gradient-text mb-2">Get Connected</h1>
+                    <p class="text-gray-600">Your business management solution</p>
+                </div>
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="phone" class="form-label">Phone Number</label>
+                        <input type="tel" id="phone" class="app-input" placeholder="602-555-1212" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" id="password" class="app-input" placeholder="Enter your password" required>
+                    </div>
+                    <div class="flex justify-between items-center mb-6">
+                        <div class="flex items-center">
+                            <input type="checkbox" id="remember" class="mr-2">
+                            <label for="remember" class="text-sm text-gray-600">Remember me</label>
+                        </div>
+                        <a href="#" class="text-sm text-purple-600 hover:underline">Forgot password?</a>
+                    </div>
+                    <button type="submit" class="app-btn w-full">Sign In</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Page -->
+    <div id="dashboard-page" class="page">
+        <header class="gradient-bg text-white p-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center">
+                    <div id="menu-toggle" class="menu-icon mr-4">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <h1 class="text-xl font-bold">Get Connected</h1>
+                </div>
+                <div class="flex items-center">
+                    <div id="notification-bell" class="mr-4 relative">
+                        <i class="fas fa-bell text-xl"></i>
+                        <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">3</span>
+                    </div>
+                    <div id="header-avatar" class="avatar">GC</div>
+                </div>
+            </div>
+        </header>
+
+        <div class="container mx-auto px-4 py-6">
+            <h2 class="text-2xl font-bold mb-2">Welcome, <span id="user-name">User</span></h2>
+            <p class="text-gray-600 mb-6">Here's your business at a glance</p>
+
+            <div class="grid grid-cols-2 gap-4 mb-6">
+                <div class="dashboard-tile ai-tile text-white" onclick="navigateTo('ai')">
+                    <i class="fas fa-robot text-2xl mb-2"></i>
+                    <span class="font-semibold">AI Assistant</span>
+                </div>
+                <div class="dashboard-tile jobs-tile text-white" onclick="navigateTo('jobs')">
+                    <i class="fas fa-briefcase text-2xl mb-2"></i>
+                    <span class="font-semibold">Jobs</span>
+                </div>
+                <div class="dashboard-tile estimates-tile text-white" onclick="navigateTo('estimates')">
+                    <i class="fas fa-file-invoice-dollar text-2xl mb-2"></i>
+                    <span class="font-semibold">Estimates</span>
+                </div>
+                <div class="dashboard-tile calendar-tile text-white" onclick="navigateTo('calendar')">
+                    <i class="fas fa-calendar-alt text-2xl mb-2"></i>
+                    <span class="font-semibold">Calendar</span>
+                </div>
+            </div>
+
+            <button class="app-btn w-full flex justify-center items-center py-3 mb-6" onclick="navigateTo('contacts')">
+                <i class="fas fa-address-book mr-2"></i>
+                <span>Contacts</span>
+            </button>
+
+            <div class="stat-card mb-4">
+                <div class="flex justify-between items-center">
+                    <h3 class="font-semibold">Today's Schedule</h3>
+                    <a href="#" class="text-purple-600 text-sm" onclick="navigateTo('calendar')">View All</a>
+                </div>
+                <div class="mt-4">
+                    <div class="flex items-center p-2 border-b border-gray-100">
+                        <div class="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                        <span class="text-sm mr-auto">Meeting with Client A</span>
+                        <span class="text-xs text-gray-500">10:00 AM</span>
+                    </div>
+                    <div class="flex items-center p-2 border-b border-gray-100">
+                        <div class="w-2 h-2 bg-purple-500 rounded-full mr-2"></div>
+                        <span class="text-sm mr-auto">Site Visit - Project B</span>
+                        <span class="text-xs text-gray-500">1:30 PM</span>
+                    </div>
+                    <div class="flex items-center p-2">
+                        <div class="w-2 h-2 bg-blue-500 rounded-full mr-2"></div>
+                        <span class="text-sm mr-auto">Team Check-in</span>
+                        <span class="text-xs text-gray-500">4:00 PM</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div class="stat-card">
+                    <div class="stat-label">Active Jobs</div>
+                    <div class="stat-value">12</div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i> 3 from last week
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Pending Estimates</div>
+                    <div class="stat-value">8</div>
+                    <div class="stat-change negative">
+                        <i class="fas fa-arrow-down"></i> 2 from last week
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Assistant Page -->
+    <div id="ai-page" class="page">
+        <header class="gradient-bg text-white p-4">
+            <div class="flex items-center">
+                <button class="mr-2" onclick="navigateTo('dashboard')">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <div class="flex items-center">
+                    <div class="ai-bot-avatar mr-3">A</div>
+                    <div>
+                        <h2 class="font-semibold">Alli</h2>
+                        <p class="text-xs opacity-80">Your Digital Worker Manager</p>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="chat-container">
+            <div id="chat-messages" class="chat-messages">
+                <div class="message bot">
+                    Hello! I'm Alli, your digital worker manager. How can I help you today?
+                </div>
+                <div class="message user">
+                    I need to check the status of Project X.
+                </div>
+                <div class="message bot">
+                    Project X is currently in progress. The team completed the initial assessment phase yesterday and is now working on the implementation. The current completion is at 45% and it's on track to be completed by the scheduled date of June 15th.
+                </div>
+                <div class="message user">
+                    Great! Any pending tasks I should know about?
+                </div>
+                <div class="message bot">
+                    Yes, there are 3 pending tasks:
+                    1. Material approval for phase 2 (due in 2 days)
+                    2. Client meeting for mid-project review (scheduled for tomorrow at 2 PM)
+                    3. Budget review for the next milestone (due by end of week)
+
+                    Would you like me to help you with any of these tasks?
+                </div>
+            </div>
+
+            <div class="p-4 border-t border-gray-200">
+                <div class="flex items-center">
+                    <input type="text" id="ai-input" class="app-input mr-2" placeholder="Type your message...">
+                    <button id="send-message" class="app-btn whitespace-nowrap">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Jobs Page -->
+    <div id="jobs-page" class="page">
+        <header class="gradient-bg text-white p-4">
+            <div class="flex items-center">
+                <button class="mr-2" onclick="navigateTo('dashboard')">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h2 class="font-semibold">Jobs</h2>
+            </div>
+        </header>
+
+        <div class="container mx-auto px-4 py-4">
+            <div class="tab-container">
+                <div class="tab active" data-tab="current-jobs">Current Jobs</div>
+                <div class="tab" data-tab="completed-jobs">Completed</div>
+                <div class="tab" data-tab="jobs-reports">Reports</div>
+            </div>
+
+            <div id="current-jobs" class="tab-content active">
+                <div class="flex justify-between items-center mb-4">
+                    <input type="text" class="app-input w-full" placeholder="Search jobs...">
+                </div>
+
+                <div class="job-card">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="font-semibold">Bathroom Renovation</h3>
+                        <span class="status-badge status-in-progress">In Progress</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 text-sm mb-2">
+                        <div>
+                            <p class="text-gray-600">Client:</p>
+                            <p>John Smith</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-600">Address:</p>
+                            <p>123 Main St, Phoenix, AZ</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 text-sm">
+                        <div>
+                            <p class="text-gray-600">Start Date:</p>
+                            <p>May 10, 2023</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-600">Price:</p>
+                            <p class="font-semibold">$12,500</p>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <div class="bg-gray-200 h-2 rounded-full w-full">
+                            <div class="bg-green-500 h-2 rounded-full" style="width: 45%;"></div>
+                        </div>
+                        <div class="flex justify-between text-xs mt-1">
+                            <span>Progress: 45%</span>
+                            <span>Due: Jun 15, 2023</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="job-card">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="font-semibold">Kitchen Remodel</h3>
+                        <span class="status-badge status-open">New</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 text-sm mb-2">
+                        <div>
+                            <p class="text-gray-600">Client:</p>
+                            <p>Sarah Johnson</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-600">Address:</p>
+                            <p>456 Oak Ave, Scottsdale, AZ</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 text-sm">
+                        <div>
+                            <p class="text-gray-600">Start Date:</p>
+                            <p>May 18, 2023</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-600">Price:</p>
+                            <p class="font-semibold">$28,750</p>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <div class="bg-gray-200 h-2 rounded-full w-full">
+                            <div class="bg-green-500 h-2 rounded-full" style="width: 10%;"></div>
+                        </div>
+                        <div class="flex justify-between text-xs mt-1">
+                            <span>Progress: 10%</span>
+                            <span>Due: Jul 30, 2023</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="job-card">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="font-semibold">Deck Construction</h3>
+                        <span class="status-badge status-delayed">Delayed</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 text-sm mb-2">
+                        <div>
+                            <p class="text-gray-600">Client:</p>
+                            <p>Robert Davis</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-600">Address:</p>
+                            <p>789 Pine Ln, Mesa, AZ</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 text-sm">
+                        <div>
+                            <p class="text-gray-600">Start Date:</p>
+                            <p>Apr 25, 2023</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-600">Price:</p>
+                            <p class="font-semibold">$8,900</p>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <div class="bg-gray-200 h-2 rounded-full w-full">
+                            <div class="bg-yellow-500 h-2 rounded-full" style="width: 65%;"></div>
+                        </div>
+                        <div class="flex justify-between text-xs mt-1">
+                            <span>Progress: 65%</span>
+                            <span>Due: May 25, 2023</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="completed-jobs" class="tab-content hidden">
+                <div class="flex justify-between items-center mb-4">
+                    <input type="text" class="app-input w-full" placeholder="Search completed jobs...">
+                </div>
+
+                <div class="job-card">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="font-semibold">Basement Finishing</h3>
+                        <span class="status-badge status-completed">Completed</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 text-sm mb-2">
+                        <div>
+                            <p class="text-gray-600">Client:</p>
+                            <p>Michael Brown</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-600">Address:</p>
+                            <p>321 Elm St, Tempe, AZ</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 text-sm">
+                        <div>
+                            <p class="text-gray-600">Completed:</p>
+                            <p>Apr 28, 2023</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-600">Final Price:</p>
+                            <p class="font-semibold">$15,200</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="job-card">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="font-semibold">Plumbing Repair</h3>
+                        <span class="status-badge status-completed">Completed</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 text-sm mb-2">
+                        <div>
+                            <p class="text-gray-600">Client:</p>
+                            <p>Jennifer Wilson</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-600">Address:</p>
+                            <p>654 Maple Dr, Chandler, AZ</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 text-sm">
+                        <div>
+                            <p class="text-gray-600">Completed:</p>
+                            <p>May 02, 2023</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-600">Final Price:</p>
+                            <p class="font-semibold">$950</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="jobs-reports" class="tab-content hidden">
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div class="stat-card">
+                        <div class="stat-label">Jobs Completed (30d)</div>
+                        <div class="stat-value">17</div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i> 3 from previous 30 days
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Gross Closed Deals</div>
+                        <div class="stat-value">$98.5k</div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i> 12% from previous 30 days
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div class="stat-card">
+                        <div class="stat-label">Jobs In Progress</div>
+                        <div class="stat-value">8</div>
+                        <div class="stat-change negative">
+                            <i class="fas fa-arrow-down"></i> 1 from last week
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Behind Schedule</div>
+                        <div class="stat-value">2</div>
+                        <div class="stat-change negative">
+                            <i class="fas fa-arrow-up"></i> 1 from last week
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <h3 class="font-semibold mb-2">Monthly Performance</h3>
+                    <!-- Placeholder for chart -->
+                    <div class="h-full flex items-center justify-center">
+                        <div class="w-full h-40 bg-gray-100 rounded flex items-center justify-center">
+                            <i class="fas fa-chart-bar text-gray-400 mr-2"></i>
+                            <span class="text-gray-400">Jobs vs. Revenue Chart</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Estimates Page -->
+    <div id="estimates-page" class="page">
+        <header class="gradient-bg text-white p-4">
+            <div class="flex items-center">
+                <button class="mr-2" onclick="navigateTo('dashboard')">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h2 class="font-semibold">Estimates</h2>
+            </div>
+        </header>
+
+        <div class="container mx-auto px-4 py-4">
+            <div class="tab-container">
+                <div class="tab active" data-tab="active-estimates">Active Estimates</div>
+                <div class="tab" data-tab="converted-estimates">Converted</div>
+                <div class="tab" data-tab="estimates-reports">Reports</div>
+            </div>
+
+            <div id="active-estimates" class="tab-content active">
+                <div class="flex justify-between items-center mb-4">
+                    <input type="text" class="app-input w-full" placeholder="Search estimates...">
+                </div>
+
+                <div class="job-card">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="font-semibold">Full House Painting</h3>
+                        <button class="app-btn-outline text-xs py-1 px-2">See Bid</button>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 text-sm mb-2">
+                        <div>
+                            <p class="text-gray-600">Lead:</p>
+                            <p>Emily Rodriguez</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-600">Address:</p>
+                            <p>1478 Sunset Blvd, Phoenix, AZ</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 text-sm">
+                        <div>
+                            <p class="text-gray-600">Proposed Start:</p>
+                            <p>Jun 10, 2023</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-600">Bid Amount:</p>
+                            <p class="font-semibold">$5,800</p>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <p class="text-gray-600 text-sm">Scope:</p>
+                        <p class="text-sm">Interior painting of all rooms, ceilings, and trim. Premium paint included.</p>
+                    </div>
+                </div>
+
+                <div class="job-card">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="font-semibold">Backyard Landscaping</h3>
+                        <button class="app-btn-outline text-xs py-1 px-2">See Bid</button>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 text-sm mb-2">
+                        <div>
+                            <p class="text-gray-600">Lead:</p>
+                            <p>Thomas Green</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-600">Address:</p>
+                            <p>953 Canyon Way, Scottsdale, AZ</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 text-sm">
+                        <div>
+                            <p class="text-gray-600">Proposed Start:</p>
+                            <p>Jun 05, 2023</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-600">Bid Amount:</p>
+                            <p class="font-semibold">$8,250</p>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <p class="text-gray-600 text-sm">Scope:</p>
+                        <p class="text-sm">New desert landscaping design, drip irrigation system, and decorative rock installation.</p>
+                    </div>
+                </div>
+
+                <div class="job-card">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="font-semibold">Bathroom Remodel</h3>
+                        <button class="app-btn-outline text-xs py-1 px-2">See Bid</button>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 text-sm mb-2">
+                        <div>
+                            <p class="text-gray-600">Lead:</p>
+                            <p>Daniel Martinez</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-600">Address:</p>
+                            <p>741 River Dr, Tempe, AZ</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 text-sm">
+                        <div>
+                            <p class="text-gray-600">Proposed Start:</p>
+                            <p>Jun 20, 2023</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-600">Bid Amount:</p>
+                            <p class="font-semibold">$12,500</p>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <p class="text-gray-600 text-sm">Scope:</p>
+                        <p class="text-sm">Complete master bathroom renovation including new tile, fixtures, vanity, and glass shower enclosure.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="converted-estimates" class="tab-content hidden">
+                <div class="flex justify-between items-center mb-4">
+                    <input type="text" class="app-input w-full" placeholder="Search converted estimates...">
+                </div>
+
+                <div class="job-card">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="font-semibold">Roof Replacement</h3>
+                        <button class="app-btn-outline text-xs py-1 px-2">View Job</button>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 text-sm mb-2">
+                        <div>
+                            <p class="text-gray-600">Client:</p>
+                            <p>Lisa Thompson</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-600">Address:</p>
+                            <p>369 Highland Ave, Mesa, AZ</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 text-sm">
+                        <div>
+                            <p class="text-gray-600">Estimate Date:</p>
+                            <p>Apr 12, 2023</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-600">Accepted Amount:</p>
+                            <p class="font-semibold">$14,750</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="job-card">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="font-semibold">Driveway Extension</h3>
+                        <button class="app-btn-outline text-xs py-1 px-2">View Job</button>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 text-sm mb-2">
+                        <div>
+                            <p class="text-gray-600">Client:</p>
+                            <p>Kevin Anderson</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-600">Address:</p>
+                            <p>852 Desert View Rd, Chandler, AZ</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 text-sm">
+                        <div>
+                            <p class="text-gray-600">Estimate Date:</p>
+                            <p>Apr 28, 2023</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-600">Accepted Amount:</p>
+                            <p class="font-semibold">$5,200</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="estimates-reports" class="tab-content hidden">
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div class="stat-card">
+                        <div class="stat-label">Estimates Created (30d)</div>
+                        <div class="stat-value">24</div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i> 5 from previous 30 days
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Total Bids Value</div>
+                        <div class="stat-value">$187k</div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i> 15% from previous 30 days
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div class="stat-card">
+                        <div class="stat-label">Close Rate</div>
+                        <div class="stat-value">32%</div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i> 3% from previous 30 days
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Avg. Response Time</div>
+                        <div class="stat-value">1.2 days</div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-down"></i> 0.3 days from previous 30 days
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <h3 class="font-semibold mb-2">Estimate Performance</h3>
+                    <!-- Placeholder for chart -->
+                    <div class="h-full flex items-center justify-center">
+                        <div class="w-full h-40 bg-gray-100 rounded flex items-center justify-center">
+                            <i class="fas fa-chart-pie text-gray-400 mr-2"></i>
+                            <span class="text-gray-400">Conversion Rate Chart</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Calendar Page -->
+    <div id="calendar-page" class="page">
+        <header class="gradient-bg text-white p-4">
+            <div class="flex items-center">
+                <button class="mr-2" onclick="navigateTo('dashboard')">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h2 class="font-semibold">Calendar</h2>
+            </div>
+        </header>
+
+        <div class="container mx-auto px-4 py-4">
+            <div class="bg-white rounded-lg shadow-md p-4 mb-6">
+                <div class="flex justify-between items-center mb-4">
+                    <button class="app-btn-outline text-xs py-1 px-2">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <h3 class="font-semibold">May 2023</h3>
+                    <button class="app-btn-outline text-xs py-1 px-2">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-7 gap-2 text-center text-sm mb-2">
+                    <div>Sun</div>
+                    <div>Mon</div>
+                    <div>Tue</div>
+                    <div>Wed</div>
+                    <div>Thu</div>
+                    <div>Fri</div>
+                    <div>Sat</div>
+                </div>
+
+                <div class="grid grid-cols-7 gap-2 text-center">
+                    <div class="calendar-day text-gray-400">30</div>
+                    <div class="calendar-day">1</div>
+                    <div class="calendar-day">2</div>
+                    <div class="calendar-day has-event">3</div>
+                    <div class="calendar-day">4</div>
+                    <div class="calendar-day has-event">5</div>
+                    <div class="calendar-day">6</div>
+                    <div class="calendar-day">7</div>
+                    <div class="calendar-day has-event">8</div>
+                    <div class="calendar-day">9</div>
+                    <div class="calendar-day today">10</div>
+                    <div class="calendar-day has-event">11</div>
+                    <div class="calendar-day">12</div>
+                    <div class="calendar-day">13</div>
+                    <div class="calendar-day">14</div>
+                    <div class="calendar-day has-event">15</div>
+                    <div class="calendar-day">16</div>
+                    <div class="calendar-day">17</div>
+                    <div class="calendar-day has-event">18</div>
+                    <div class="calendar-day">19</div>
+                    <div class="calendar-day">20</div>
+                    <div class="calendar-day">21</div>
+                    <div class="calendar-day has-event">22</div>
+                    <div class="calendar-day">23</div>
+                    <div class="calendar-day">24</div>
+                    <div class="calendar-day">25</div>
+                    <div class="calendar-day">26</div>
+                    <div class="calendar-day">27</div>
+                    <div class="calendar-day">28</div>
+                    <div class="calendar-day has-event">29</div>
+                    <div class="calendar-day">30</div>
+                    <div class="calendar-day">31</div>
+                    <div class="calendar-day text-gray-400">1</div>
+                    <div class="calendar-day text-gray-400">2</div>
+                    <div class="calendar-day text-gray-400">3</div>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <h3 class="font-semibold mb-3">Today's Schedule - May 10</h3>
+                <div class="bg-white rounded-lg shadow-sm p-3 mb-3">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 w-12 text-center">
+                            <div class="text-sm font-semibold">10:00</div>
+                            <div class="text-xs">AM</div>
+                        </div>
+                        <div class="ml-4 flex-grow border-l-2 border-green-500 pl-3">
+                            <h4 class="font-semibold">Meeting with Client A</h4>
+                            <p class="text-sm text-gray-600">Project discussion and contract review</p>
+                            <div class="flex items-center mt-1 text-xs text-gray-500">
+                                <i class="fas fa-map-marker-alt mr-1"></i>
+                                <span>Office - Conference Room</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm p-3 mb-3">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 w-12 text-center">
+                            <div class="text-sm font-semibold">1:30</div>
+                            <div class="text-xs">PM</div>
+                        </div>
+                        <div class="ml-4 flex-grow border-l-2 border-purple-500 pl-3">
+                            <h4 class="font-semibold">Site Visit - Project B</h4>
+                            <p class="text-sm text-gray-600">Progress inspection and material delivery</p>
+                            <div class="flex items-center mt-1 text-xs text-gray-500">
+                                <i class="fas fa-map-marker-alt mr-1"></i>
+                                <span>123 Main St, Phoenix, AZ</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm p-3">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 w-12 text-center">
+                            <div class="text-sm font-semibold">4:00</div>
+                            <div class="text-xs">PM</div>
+                        </div>
+                        <div class="ml-4 flex-grow border-l-2 border-blue-500 pl-3">
+                            <h4 class="font-semibold">Team Check-in</h4>
+                            <p class="text-sm text-gray-600">Weekly progress review and planning</p>
+                            <div class="flex items-center mt-1 text-xs text-gray-500">
+                                <i class="fas fa-video mr-1"></i>
+                                <span>Zoom Meeting</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-center">
+                <button class="app-btn-outline text-center">
+                    <i class="fas fa-plus mr-1"></i> Add New Event
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contacts Page -->
+    <div id="contacts-page" class="page">
+        <header class="gradient-bg text-white p-4">
+            <div class="flex items-center">
+                <button class="mr-2" onclick="navigateTo('dashboard')">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h2 class="font-semibold">Contacts</h2>
+            </div>
+        </header>
+
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center mb-4">
+                <input type="text" class="app-input w-full" placeholder="Search contacts...">
+                <button class="app-btn ml-2 whitespace-nowrap">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+
+            <div class="mb-4">
+                <div class="text-sm font-semibold text-gray-500 mb-2">A</div>
+                <div class="contact-card" onclick="showContactDetails('anderson')">
+                    <div class="avatar mr-3">KA</div>
+                    <div>
+                        <h4 class="font-semibold">Kevin Anderson</h4>
+                        <p class="text-sm text-gray-600">Client</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <div class="text-sm font-semibold text-gray-500 mb-2">B</div>
+                <div class="contact-card" onclick="showContactDetails('brown')">
+                    <div class="avatar mr-3">MB</div>
+                    <div>
+                        <h4 class="font-semibold">Michael Brown</h4>
+                        <p class="text-sm text-gray-600">Client</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <div class="text-sm font-semibold text-gray-500 mb-2">D</div>
+                <div class="contact-card" onclick="showContactDetails('davis')">
+                    <div class="avatar mr-3">RD</div>
+                    <div>
+                        <h4 class="font-semibold">Robert Davis</h4>
+                        <p class="text-sm text-gray-600">Client</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <div class="text-sm font-semibold text-gray-500 mb-2">G</div>
+                <div class="contact-card" onclick="showContactDetails('green')">
+                    <div class="avatar mr-3">TG</div>
+                    <div>
+                        <h4 class="font-semibold">Thomas Green</h4>
+                        <p class="text-sm text-gray-600">Lead</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <div class="text-sm font-semibold text-gray-500 mb-2">J</div>
+                <div class="contact-card" onclick="showContactDetails('johnson')">
+                    <div class="avatar mr-3">SJ</div>
+                    <div>
+                        <h4 class="font-semibold">Sarah Johnson</h4>
+                        <p class="text-sm text-gray-600">Client</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <div class="text-sm font-semibold text-gray-500 mb-2">M</div>
+                <div class="contact-card" onclick="showContactDetails('martinez')">
+                    <div class="avatar mr-3">DM</div>
+                    <div>
+                        <h4 class="font-semibold">Daniel Martinez</h4>
+                        <p class="text-sm text-gray-600">Lead</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <div class="text-sm font-semibold text-gray-500 mb-2">R</div>
+                <div class="contact-card" onclick="showContactDetails('rodriguez')">
+                    <div class="avatar mr-3">ER</div>
+                    <div>
+                        <h4 class="font-semibold">Emily Rodriguez</h4>
+                        <p class="text-sm text-gray-600">Lead</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <div class="text-sm font-semibold text-gray-500 mb-2">S</div>
+                <div class="contact-card" onclick="showContactDetails('smith')">
+                    <div class="avatar mr-3">JS</div>
+                    <div>
+                        <h4 class="font-semibold">John Smith</h4>
+                        <p class="text-sm text-gray-600">Client</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <div class="text-sm font-semibold text-gray-500 mb-2">T</div>
+                <div class="contact-card" onclick="showContactDetails('thompson')">
+                    <div class="avatar mr-3">LT</div>
+                    <div>
+                        <h4 class="font-semibold">Lisa Thompson</h4>
+                        <p class="text-sm text-gray-600">Client</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <div class="text-sm font-semibold text-gray-500 mb-2">W</div>
+                <div class="contact-card" onclick="showContactDetails('wilson')">
+                    <div class="avatar mr-3">JW</div>
+                    <div>
+                        <h4 class="font-semibold">Jennifer Wilson</h4>
+                        <p class="text-sm text-gray-600">Client</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Details Page -->
+    <div id="contact-details-page" class="page">
+        <header class="gradient-bg text-white p-4">
+            <div class="flex items-center">
+                <button class="mr-2" onclick="navigateTo('contacts')">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h2 class="font-semibold">Contact Details</h2>
+            </div>
+        </header>
+
+        <div class="container mx-auto px-4 py-4">
+            <div class="bg-white rounded-lg shadow-md p-4 mb-6">
+                <div class="flex items-center mb-4">
+                    <div id="contact-avatar" class="avatar avatar-large mr-4">JS</div>
+                    <div>
+                        <h3 id="contact-name" class="text-xl font-semibold">John Smith</h3>
+                        <p id="contact-type" class="text-gray-600">Client</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 gap-4 mb-4">
+                    <div>
+                        <label class="form-label">Phone</label>
+                        <div class="flex">
+                            <input type="tel" id="contact-phone" class="app-input" value="602-555-1234">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="form-label">Email</label>
+                        <input type="email" id="contact-email" class="app-input" value="john.smith@example.com">
+                    </div>
+                    <div>
+                        <label class="form-label">Address</label>
+                        <input type="text" id="contact-address" class="app-input" value="123 Main St, Phoenix, AZ 85001">
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">Status</label>
+                    <select class="app-input" id="contact-status">
+                        <option value="active" selected>Active Client</option>
+                        <option value="lead">Lead</option>
+                        <option value="prospect">Prospect</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">Pipeline Status</label>
+                    <select class="app-input" id="contact-pipeline">
+                        <option value="contract-signed" selected>Contract Signed</option>
+                        <option value="proposal-sent">Proposal Sent</option>
+                        <option value="negotiation">Negotiation</option>
+                        <option value="initial-contact">Initial Contact</option>
+                    </select>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">Tags</label>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="bg-purple-100 text-purple-800 text-xs font-semibold px-2.5 py-0.5 rounded">Bathroom Renovation</span>
+                        <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded">High Value</span>
+                        <span class="bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-0.5 rounded">Repeat Customer</span>
+                        <button class="text-gray-400 hover:text-gray-600">
+                            <i class="fas fa-plus-circle"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">Notes</label>
+                    <textarea class="app-input" rows="4">Prefers communication via text message. Has referred 2 other clients. Interested in kitchen remodel next year.</textarea>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <button class="app-btn">
+                        <i class="fas fa-save mr-2"></i>
+                        Save Changes
+                    </button>
+                    <button class="app-btn-outline">
+                        <i class="fas fa-phone mr-2"></i>
+                        Call Contact
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md p-4 mb-6">
+                <h3 class="font-semibold mb-3">Recent Jobs</h3>
+                <div class="border-b pb-2 mb-2">
+                    <p class="font-medium">Bathroom Renovation</p>
+                    <div class="flex justify-between text-sm">
+                        <span class="text-gray-600">Status: In Progress</span>
+                        <span class="text-gray-600">$12,500</span>
+                    </div>
+                </div>
+                <div class="border-b pb-2 mb-2">
+                    <p class="font-medium">Deck Repair</p>
+                    <div class="flex justify-between text-sm">
+                        <span class="text-gray-600">Status: Completed</span>
+                        <span class="text-gray-600">$3,200</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md p-4">
+                <h3 class="font-semibold mb-3">Communication History</h3>
+                <div class="border-b pb-2 mb-2">
+                    <div class="flex justify-between">
+                        <p class="font-medium">Phone Call</p>
+                        <span class="text-xs text-gray-500">May 3, 2023</span>
+                    </div>
+                    <p class="text-sm text-gray-600">Discussed timeline for bathroom project</p>
+                </div>
+                <div class="border-b pb-2 mb-2">
+                    <div class="flex justify-between">
+                        <p class="font-medium">Email</p>
+                        <span class="text-xs text-gray-500">Apr 28, 2023</span>
+                    </div>
+                    <p class="text-sm text-gray-600">Sent contract documents</p>
+                </div>
+                <div>
+                    <div class="flex justify-between">
+                        <p class="font-medium">In-Person Meeting</p>
+                        <span class="text-xs text-gray-500">Apr 25, 2023</span>
+                    </div>
+                    <p class="text-sm text-gray-600">Initial consultation and estimate</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Page -->
+    <div id="profile-page" class="page">
+        <header class="gradient-bg text-white p-4">
+            <div class="flex items-center">
+                <button class="mr-2" onclick="toggleMenu()">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h2 class="font-semibold">Profile Settings</h2>
+            </div>
+        </header>
+
+        <div class="container mx-auto px-4 py-4">
+            <div class="bg-white rounded-lg shadow-md p-4 mb-6">
+                <div class="flex items-center justify-center mb-6">
+                    <div class="avatar avatar-large">GC</div>
+                    <button class="ml-4 app-btn-outline text-sm">
+                        <i class="fas fa-camera mr-1"></i> Change Photo
+                    </button>
+                </div>
+
+                <div class="form-group">
+                    <label for="profile-name" class="form-label">Full Name</label>
+                    <input type="text" id="profile-name" class="app-input" value="John Doe">
+                </div>
+
+                <div class="form-group">
+                    <label for="profile-email" class="form-label">Email Address</label>
+                    <input type="email" id="profile-email" class="app-input" value="john.doe@example.com">
+                </div>
+
+                <div class="form-group">
+                    <label for="profile-phone" class="form-label">Phone Number</label>
+                    <input type="tel" id="profile-phone" class="app-input" value="602-555-1212">
+                </div>
+
+                <div class="form-group">
+                    <label for="profile-title" class="form-label">Job Title</label>
+                    <input type="text" id="profile-title" class="app-input" value="Project Manager">
+                </div>
+
+                <button class="app-btn w-full">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Company Settings Page -->
+    <div id="company-page" class="page">
+        <header class="gradient-bg text-white p-4">
+            <div class="flex items-center">
+                <button class="mr-2" onclick="toggleMenu()">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h2 class="font-semibold">Company Settings</h2>
+            </div>
+        </header>
+
+        <div class="container mx-auto px-4 py-4">
+            <div class="bg-white rounded-lg shadow-md p-4 mb-6">
+                <div class="flex items-center justify-center mb-6">
+                    <div class="w-20 h-20 bg-gray-200 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-building text-gray-400 text-3xl"></i>
+                    </div>
+                    <button class="ml-4 app-btn-outline text-sm">
+                        <i class="fas fa-upload mr-1"></i> Upload Logo
+                    </button>
+                </div>
+
+                <div class="form-group">
+                    <label for="company-name" class="form-label">Company Name</label>
+                    <input type="text" id="company-name" class="app-input" value="ABC Construction">
+                </div>
+
+                <div class="form-group">
+                    <label for="company-address" class="form-label">Business Address</label>
+                    <input type="text" id="company-address" class="app-input" value="789 Business Ave, Phoenix, AZ 85001">
+                </div>
+
+                <div class="form-group">
+                    <label for="company-phone" class="form-label">Business Phone</label>
+                    <input type="tel" id="company-phone" class="app-input" value="602-555-9876">
+                </div>
+
+                <div class="form-group">
+                    <label for="company-email" class="form-label">Business Email</label>
+                    <input type="email" id="company-email" class="app-input" value="info@abcconstruction.com">
+                </div>
+
+                <div class="form-group">
+                    <label for="company-website" class="form-label">Website</label>
+                    <input type="url" id="company-website" class="app-input" value="https://www.abcconstruction.com">
+                </div>
+
+                <button class="app-btn w-full">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Change Password Page -->
+    <div id="password-page" class="page">
+        <header class="gradient-bg text-white p-4">
+            <div class="flex items-center">
+                <button class="mr-2" onclick="toggleMenu()">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h2 class="font-semibold">Change Password</h2>
+            </div>
+        </header>
+
+        <div class="container mx-auto px-4 py-4">
+            <div class="bg-white rounded-lg shadow-md p-4 mb-6">
+                <div class="form-group">
+                    <label for="current-password" class="form-label">Current Password</label>
+                    <input type="password" id="current-password" class="app-input" placeholder="Enter current password">
+                </div>
+
+                <div class="form-group">
+                    <label for="new-password" class="form-label">New Password</label>
+                    <input type="password" id="new-password" class="app-input" placeholder="Enter new password">
+                </div>
+
+                <div class="form-group">
+                    <label for="confirm-password" class="form-label">Confirm New Password</label>
+                    <input type="password" id="confirm-password" class="app-input" placeholder="Confirm new password">
+                </div>
+
+                <button class="app-btn w-full">Update Password</button>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md p-4">
+                <h3 class="font-semibold mb-3">Password Guidelines</h3>
+                <ul class="text-sm text-gray-600 list-disc pl-5">
+                    <li>Use at least 8 characters</li>
+                    <li>Include at least one uppercase letter</li>
+                    <li>Include at least one number</li>
+                    <li>Include at least one special character</li>
+                    <li>Avoid using personal information</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Time Zone Page -->
+    <div id="timezone-page" class="page">
+        <header class="gradient-bg text-white p-4">
+            <div class="flex items-center">
+                <button class="mr-2" onclick="toggleMenu()">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h2 class="font-semibold">Set Time Zone</h2>
+            </div>
+        </header>
+
+        <div class="container mx-auto px-4 py-4">
+            <div class="bg-white rounded-lg shadow-md p-4 mb-6">
+                <div class="form-group">
+                    <label for="timezone-select" class="form-label">Time Zone</label>
+                    <select id="timezone-select" class="app-input">
+                        <option value="America/Phoenix" selected>Mountain Time - Phoenix (GMT-07:00)</option>
+                        <option value="America/Los_Angeles">Pacific Time (GMT-08:00)</option>
+                        <option value="America/Denver">Mountain Time (GMT-07:00)</option>
+                        <option value="America/Chicago">Central Time (GMT-06:00)</option>
+                        <option value="America/New_York">Eastern Time (GMT-05:00)</option>
+                        <option value="America/Anchorage">Alaska Time (GMT-09:00)</option>
+                        <option value="Pacific/Honolulu">Hawaii Time (GMT-10:00)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label mb-2">Format Preferences</label>
+                    <div class="flex items-center mb-3">
+                        <input type="radio" id="format-12h" name="time-format" checked class="mr-2">
+                        <label for="format-12h">12-hour (2:30 PM)</label>
+                    </div>
+                    <div class="flex items-center">
+                        <input type="radio" id="format-24h" name="time-format" class="mr-2">
+                        <label for="format-24h">24-hour (14:30)</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label mb-2">Date Format</label>
+                    <div class="flex items-center mb-3">
+                        <input type="radio" id="date-mdy" name="date-format" checked class="mr-2">
+                        <label for="date-mdy">MM/DD/YYYY (05/10/2023)</label>
+                    </div>
+                    <div class="flex items-center mb-3">
+                        <input type="radio" id="date-dmy" name="date-format" class="mr-2">
+                        <label for="date-dmy">DD/MM/YYYY (10/05/2023)</label>
+                    </div>
+                    <div class="flex items-center">
+                        <input type="radio" id="date-ymd" name="date-format" class="mr-2">
+                        <label for="date-ymd">YYYY-MM-DD (2023-05-10)</label>
+                    </div>
+                </div>
+
+                <button class="app-btn w-full">Save Preferences</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notifications Page -->
+    <div id="notifications-page" class="page">
+        <header class="gradient-bg text-white p-4">
+            <div class="flex items-center">
+                <button class="mr-2" onclick="toggleMenu()">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h2 class="font-semibold">Notification Settings</h2>
+            </div>
+        </header>
+
+        <div class="container mx-auto px-4 py-4">
+            <div class="bg-white rounded-lg shadow-md p-4 mb-6">
+                <h3 class="font-semibold mb-4">Push Notifications</h3>
+
+                <div class="flex justify-between items-center mb-4">
+                    <div>
+                        <p class="font-medium">New Job Alerts</p>
+                        <p class="text-sm text-gray-600">Get notified when a new job is created</p>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="flex justify-between items-center mb-4">
+                    <div>
+                        <p class="font-medium">Estimate Updates</p>
+                        <p class="text-sm text-gray-600">Get notified when an estimate is approved or declined</p>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="flex justify-between items-center mb-4">
+                    <div>
+                        <p class="font-medium">Calendar Events</p>
+                        <p class="text-sm text-gray-600">Get reminders about upcoming appointments</p>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="flex justify-between items-center mb-4">
+                    <div>
+                        <p class="font-medium">AI Assistant Messages</p>
+                        <p class="text-sm text-gray-600">Get notified when Alli has updates or questions</p>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md p-4 mb-6">
+                <h3 class="font-semibold mb-4">Email Notifications</h3>
+
+                <div class="flex justify-between items-center mb-4">
+                    <div>
+                        <p class="font-medium">Daily Summaries</p>
+                        <p class="text-sm text-gray-600">Receive daily activity summaries</p>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="flex justify-between items-center mb-4">
+                    <div>
+                        <p class="font-medium">Weekly Reports</p>
+                        <p class="text-sm text-gray-600">Receive weekly performance reports</p>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="flex justify-between items-center mb-4">
+                    <div>
+                        <p class="font-medium">Job Completions</p>
+                        <p class="text-sm text-gray-600">Get notified when a job is completed</p>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md p-4">
+                <h3 class="font-semibold mb-4">SMS Notifications</h3>
+
+                <div class="flex justify-between items-center mb-4">
+                    <div>
+                        <p class="font-medium">Urgent Updates</p>
+                        <p class="text-sm text-gray-600">Receive SMS for high-priority items</p>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="flex justify-between items-center">
+                    <div>
+                        <p class="font-medium">Appointment Reminders</p>
+                        <p class="text-sm text-gray-600">Get SMS reminders for upcoming appointments</p>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // App state
+        let currentPage = 'login';
+        let menuOpen = false;
+        const userData = {
+            name: 'John Doe',
+            company: 'ABC Construction',
+            initials: 'JD',
+            phone: '602-555-1212',
+            email: 'john.doe@example.com'
+        };
+
+        // DOM elements
+        const pages = document.querySelectorAll('.page');
+        const menuToggle = document.getElementById('menu-toggle');
+        const hamburgerMenu = document.getElementById('hamburger-menu');
+        const overlay = document.getElementById('overlay');
+        const loginForm = document.getElementById('login-form');
+        const aiInput = document.getElementById('ai-input');
+        const sendMessage = document.getElementById('send-message');
+        const chatMessages = document.getElementById('chat-messages');
+        const toast = document.getElementById('toast');
+        const toastMessage = document.getElementById('toast-message');
+        const logoutBtn = document.getElementById('logout-btn');
+        const notificationBell = document.getElementById('notification-bell');
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', () => {
+            initApp();
+            setEventListeners();
+        });
+
+        // Initialize app
+        function initApp() {
+            // Set user data in UI
+            document.getElementById('menu-username').textContent = userData.name;
+            document.getElementById('menu-company').textContent = userData.company;
+            document.getElementById('user-name').textContent = userData.name.split(' ')[0];
+            
+            // Set avatar initials
+            const avatars = document.querySelectorAll('.avatar');
+            avatars.forEach(avatar => {
+                avatar.textContent = userData.initials;
+            });
+
+            // Set up tab handling
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabContainer = this.closest('.tab-container');
+                    const tabContents = document.querySelectorAll('.tab-content');
+                    const targetTabId = this.getAttribute('data-tab');
+                    
+                    // Update active tab
+                    tabContainer.querySelectorAll('.tab').forEach(t => {
+                        t.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                    
+                    // Show target tab content
+                    tabContents.forEach(content => {
+                        content.classList.add('hidden');
+                        if (content.id === targetTabId) {
+                            content.classList.remove('hidden');
+                        }
+                    });
+                });
+            });
+        }
+
+        // Set event listeners
+        function setEventListeners() {
+            // Menu toggle
+            menuToggle.addEventListener('click', toggleMenu);
+            
+            // Overlay click to close menu
+            overlay.addEventListener('click', toggleMenu);
+            
+            // Login form submission
+            loginForm.addEventListener('submit', handleLogin);
+            
+            // AI chat functionality
+            sendMessage.addEventListener('click', sendAiMessage);
+            aiInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendAiMessage();
+                }
+            });
+
+            // Logout button
+            logoutBtn.addEventListener('click', handleLogout);
+
+            // Notification bell
+            notificationBell.addEventListener('click', showNotifications);
+        }
+
+        // Page navigation
+        function navigateTo(page) {
+            // Hide all pages
+            pages.forEach(p => {
+                p.classList.remove('active');
+                p.classList.remove('slide-in');
+                p.classList.remove('slide-out');
+            });
+            
+            // Show target page with animation
+            const targetPage = document.getElementById(`${page}-page`);
+            if (targetPage) {
+                targetPage.classList.add('active');
+                targetPage.classList.add('slide-in');
+                currentPage = page;
+                
+                // Close menu if open
+                if (menuOpen) {
+                    toggleMenu();
+                }
+            }
+        }
+
+        // Toggle hamburger menu
+        function toggleMenu() {
+            menuOpen = !menuOpen;
+            
+            if (menuOpen) {
+                hamburgerMenu.classList.add('open');
+                overlay.classList.add('active');
+                menuToggle.classList.add('active');
+            } else {
+                hamburgerMenu.classList.remove('open');
+                overlay.classList.remove('active');
+                menuToggle.classList.remove('active');
+            }
+        }
+
+        // Handle login form submission
+        function handleLogin(e) {
+            e.preventDefault();
+            const phone = document.getElementById('phone').value;
+            const password = document.getElementById('password').value;
+            
+            // Simple validation
+            if (phone && password) {
+                navigateTo('dashboard');
+                showToast('Login successful!', 'success');
+            } else {
+                showToast('Please enter phone number and password', 'error');
+            }
+        }
+
+        // Handle logout
+        function handleLogout() {
+            navigateTo('login');
+            showToast('Logged out successfully', 'info');
+        }
+
+        // Send AI message
+        function sendAiMessage() {
+            const message = aiInput.value.trim();
+            if (!message) return;
+            
+            // Add user message
+            const userMessageElement = document.createElement('div');
+            userMessageElement.classList.add('message', 'user');
+            userMessageElement.textContent = message;
+            chatMessages.appendChild(userMessageElement);
+            
+            // Clear input
+            aiInput.value = '';
+            
+            // Scroll to bottom
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            
+            // Show typing indicator
+            const typingIndicator = document.createElement('div');
+            typingIndicator.classList.add('typing-indicator');
+            typingIndicator.innerHTML = '<span></span><span></span><span></span>';
+            chatMessages.appendChild(typingIndicator);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            
+            // Simulate AI response after delay
+            setTimeout(() => {
+                // Remove typing indicator
+                chatMessages.removeChild(typingIndicator);
+                
+                // Add AI response
+                const aiResponse = getAiResponse(message);
+                const aiMessageElement = document.createElement('div');
+                aiMessageElement.classList.add('message', 'bot');
+                aiMessageElement.textContent = aiResponse;
+                chatMessages.appendChild(aiMessageElement);
+                
+                // Scroll to bottom
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }, 1500);
+        }
+
+        // Get AI response (simplified for demo)
+        function getAiResponse(message) {
+            const responses = [
+                "I'll look into that for you right away.",
+                "Based on your current projects, I recommend prioritizing the bathroom renovation this week.",
+                "I've analyzed your schedule and noticed there's a potential conflict next Tuesday.",
+                "The team has completed 45% of the current project, which is on track with our timeline.",
+                "Would you like me to schedule a follow-up call with the client?",
+                "I've updated the job status in our system.",
+                "The latest estimate has been sent to the client via email.",
+                "Based on historical data, this job should take approximately 12-15 business days to complete.",
+                "I've noticed a pattern in client inquiries - would you like me to prepare a report?"
+            ];
+            
+            return responses[Math.floor(Math.random() * responses.length)];
+        }
+
+        // Show toast notification
+        function showToast(message, type = 'info') {
+            toastMessage.textContent = message;
+            toast.className = 'toast';
+            toast.classList.add(`toast-${type}`);
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Show notifications panel
+        function showNotifications() {
+            showToast('You have 3 new notifications', 'info');
+        }
+
+        // Show contact details
+        function showContactDetails(contactId) {
+            navigateTo('contact-details');
+            
+            // In a real app, we would fetch contact details from the server
+            // For this demo, we'll use sample data based on the contactId
+            let contactName = 'John Smith';
+            let contactInitials = 'JS';
+            
+            switch(contactId) {
+                case 'anderson':
+                    contactName = 'Kevin Anderson';
+                    contactInitials = 'KA';
+                    break;
+                case 'brown':
+                    contactName = 'Michael Brown';
+                    contactInitials = 'MB';
+                    break;
+                case 'smith':
+                    contactName = 'John Smith';
+                    contactInitials = 'JS';
+                    break;
+                // Add more cases as needed
+            }
+            
+            document.getElementById('contact-name').textContent = contactName;
+            document.getElementById('contact-avatar').textContent = contactInitials;
+        }
+    </script>
+</body>
+</html>
