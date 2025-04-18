@@ -1,0 +1,6 @@
+captainVersion: 4
+version: 1.0.0
+description: Get Connected Frontend
+documentation: "https://example.com"
+build:
+  template: StaticHtml
