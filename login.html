@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Get Connected</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<!-- <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const loginForm = document.getElementById('login-form');
+  
+      if (loginForm) {
+        loginForm.addEventListener('submit', async function (e) {
+          e.preventDefault();
+  
+          const phoneNumber = document.getElementById('phone').value;
+          const password = document.getElementById('password').value;
+  
+          try {
+            const response = await fetch('https://get-connected-backend.dev.quantumos.ai/api/auth/login', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                phoneNumber,
+                password
+              })
+            });
+  
+            const data = await response.json();
+            // localStorage.setItem('token', data..token);
+            console.log("dataa",data)
+  
+            if (response.ok) {
+              alert('Login successful!');
+              console.log("tokendata",data.token)
+              localStorage.setItem('token', data.data.token); // Save token
+              localStorage.setItem('userInfo', JSON.stringify(data.data.user));
+              window.location.href = 'index.html';
+             
+            } else {
+              alert(data.message || 'Login failed');
+            }
+  
+          } catch (error) {
+            console.error('Login error:', error);
+            alert('An error occurred during login.');
+          }
+        });
+      }
+    });
+  </script> -->
+
+<body>
+    <!-- _________ start main area _________ -->
+    <main>
+        <div class="min-h-screen flex flex-col items-center justify-center p-4">
+            <div class="w-full max-w-md bg-white rounded-lg shadow-lg p-8 ios-card">
+                <div class="text-center mb-8">
+                    <h1 class="text-3xl font-bold gradient-text mb-2">Get Connected</h1>
+                    <p class="text-gray-600">Your business management solution</p>
+                </div>
+                <form id="login-form" target="index.html" method="post" autocomplete="off">
+                    <div class="form-group">
+                        <label for="phone" class="form-label">Phone Number</label>
+                        <input type="tel" id="phone" class="app-input" placeholder="602-555-1212" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" id="password" class="app-input" placeholder="Enter your password" required>
+                    </div>
+                    <div class="flex justify-between items-center mb-6">
+                        <div class="flex items-center">
+                            <input type="checkbox" id="remember" class="mr-2">
+                            <label for="remember" class="text-sm text-gray-600">Remember me</label>
+                        </div>
+                        <a href="#" class="text-sm text-purple-600 hover:underline">Forgot password?</a>
+                    </div>
+                    <button type="submit" class="app-btn w-full">Sign In</button>
+                </form>
+            </div>
+        </div>
+    </main>
+    <!-- _________ end main area _________ -->
+
+    <!-- scripts -->
+    <script src="assets/js/login.js"></script>
+</body>

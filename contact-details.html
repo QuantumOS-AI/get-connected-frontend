@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Get Connected</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+    <!-- _________ start header/sidemenu area _________ -->
+    <header id="hamburger-menu" class="hamburger-menu">
+        <div class="flex flex-col max-h-full">
+            <div class="p-4 gradient-bg text-white relative mb-3">
+                <div class="flex items-center">
+                    <div id="profile-avatar" class="avatar avatar-large">
+                        <img class="rounded-full object-cover" src="assets/img/profile.png" alt="profile">
+                    </div>
+                    <div class="ml-4">
+                        <h3 id="menu-username" class="text-lg font-semibold">User Name</h3>
+                        <p id="menu-company" class="text-sm opacity-80">Company Name</p>
+                    </div>
+                </div>
+
+                <div class="xl_hidden absolute top-4 right-4">
+                    <button class="menu-icon" type="button" onclick="toggleMenu()">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="overflow-x-auto">
+                <ul class="menu-list">
+                    <li class="menu-item">
+                        <a class="menu-link active" href="index.html">
+                            <i class="fas fa-home"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="profile-settings.html">
+                            <i class="fas fa-user"></i>
+                            <span>Profile</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="company-settings.html">
+                            <i class="fas fa-building"></i>
+                            <span>Company Settings</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="change-password.html">
+                            <i class="fas fa-lock"></i>
+                            <span>Change Password</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="set-time-zone.html">
+                            <i class="fas fa-globe"></i>
+                            <span>Set Time Zone</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="notification-settings.html">
+                            <i class="fas fa-bell"></i>
+                            <span>Notifications</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="logout.html">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </header>
+    <div id="overlay" class="overlay"></div>
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <i class="fas fa-check-circle mr-2"></i>
+        <span id="toast-message">Operation successful!</span>
+    </div>
+    <!-- _________ end header/sidemenu area _________ -->
+
+    <!-- _________ start main area _________ -->
+    <main class="main">
+        <!-- ....... start top header section ....... -->
+        <section class=" top_header gradient-bg">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center">
+                    <div class="mr-3">
+                        <a class="" href="contacts.html">
+                            <i class="fa-solid fa-arrow-left"></i>
+                        </a>
+                    </div>
+                    <h1 class="text-xl font-bold">Contact Details</h1>
+                </div>
+                <div class="flex items-center">
+                    <a class="mr-4 relative" id="notification-bell" href="notifications.html">
+                        <i class="fas fa-bell text-xl"></i>
+                        <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">3</span>
+                    </a>
+                    <a id="header-avatar" class="avatar" href="profile-settings.html">
+                        <img class="size-10 rounded-full object-cover" src="assets/img/profile.png" alt="profile">
+                    </a>
+                </div>
+            </div>
+        </section>
+        <!-- ....... end top header section ....... -->
+
+        <!-- ....... start contact details section ....... -->
+        <section>
+            <div class="container mx-auto px-4 py-6">
+                <div class="bg-white rounded-lg shadow-md p-4 mb-6">
+                    <div class="flex items-center mb-4">
+                        <div id="contact-avatar" class="avatar avatar-large mr-4">JS</div>
+                        <div>
+                            <h3 id="contact-name" class="text-xl font-semibold">John Smith</h3>
+                            <p id="contact-type" class="text-gray-600">Client</p>
+                        </div>
+                    </div>
+    
+                    <div class="grid grid-cols-1 gap-4 mb-4">
+                        <div>
+                            <label class="form-label">Phone</label>
+                            <div class="flex">
+                                <input type="tel" id="contact-phone" class="app-input" value="602-555-1234">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="form-label">Email</label>
+                            <input type="email" id="contact-email" class="app-input" value="john.smith@example.com">
+                        </div>
+                        <div>
+                            <label class="form-label">Address</label>
+                            <input type="text" id="contact-address" class="app-input" value="123 Main St, Phoenix, AZ 85001">
+                        </div>
+                    </div>
+    
+                    <div class="mb-4">
+                        <label class="form-label">Status</label>
+                        <select class="app-input" id="contact-status">
+                            <option value="active" selected>Active Client</option>
+                            <option value="lead">Lead</option>
+                            <option value="prospect">Prospect</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                    </div>
+    
+                    <div class="mb-4">
+                        <label class="form-label">Pipeline Status</label>
+                        <select class="app-input" id="contact-pipeline">
+                            <option value="contract-signed" selected>Contract Signed</option>
+                            <option value="proposal-sent">Proposal Sent</option>
+                            <option value="negotiation">Negotiation</option>
+                            <option value="initial-contact">Initial Contact</option>
+                        </select>
+                    </div>
+    
+                    <div class="mb-4">
+                        <label class="form-label">Tags</label>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="bg-purple-100 text-purple-800 text-xs font-semibold px-2.5 py-0.5 rounded">Bathroom Renovation</span>
+                            <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded">High Value</span>
+                            <span class="bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-0.5 rounded">Repeat Customer</span>
+                            <button class="text-gray-400 hover:text-gray-600">
+                                <i class="fas fa-plus-circle"></i>
+                            </button>
+                        </div>
+                    </div>
+    
+                    <div class="mb-4">
+                        <label class="form-label">Notes</label>
+                        <textarea class="app-input" rows="4">Prefers communication via text message. Has referred 2 other clients. Interested in kitchen remodel next year.</textarea>
+                    </div>
+    
+                    <div class="grid sm:grid-cols-2 gap-4">
+                        <button class="app-btn">
+                            <i class="fas fa-save mr-2"></i>
+                            Save Changes
+                        </button>
+                        <button class="app-btn-outline">
+                            <i class="fas fa-phone mr-2"></i>
+                            Call Contact
+                        </button>
+                    </div>
+                </div>
+    
+                <div class="bg-white rounded-lg shadow-md p-4 mb-6">
+                    <h3 class="font-semibold mb-3">Recent Jobs</h3>
+                    <div class="border-b pb-2 mb-2">
+                        <p class="font-medium">Bathroom Renovation</p>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600">Status: In Progress</span>
+                            <span class="text-gray-600">$12,500</span>
+                        </div>
+                    </div>
+                    <div class="border-b pb-2 mb-2">
+                        <p class="font-medium">Deck Repair</p>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600">Status: Completed</span>
+                            <span class="text-gray-600">$3,200</span>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="bg-white rounded-lg shadow-md p-4">
+                    <h3 class="font-semibold mb-3">Communication History</h3>
+                    <div class="border-b pb-2 mb-2">
+                        <div class="flex justify-between">
+                            <p class="font-medium">Phone Call</p>
+                            <span class="text-xs text-gray-500">May 3, 2023</span>
+                        </div>
+                        <p class="text-sm text-gray-600">Discussed timeline for bathroom project</p>
+                    </div>
+                    <div class="border-b pb-2 mb-2">
+                        <div class="flex justify-between">
+                            <p class="font-medium">Email</p>
+                            <span class="text-xs text-gray-500">Apr 28, 2023</span>
+                        </div>
+                        <p class="text-sm text-gray-600">Sent contract documents</p>
+                    </div>
+                    <div>
+                        <div class="flex justify-between">
+                            <p class="font-medium">In-Person Meeting</p>
+                            <span class="text-xs text-gray-500">Apr 25, 2023</span>
+                        </div>
+                        <p class="text-sm text-gray-600">Initial consultation and estimate</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- ....... end contact details section ....... -->
+    </main>
+    <!-- _________ end main area _________ -->
+
+    <!-- scripts -->
+    <script src="assets/js/common.js"></script>
+    <script src="assets/js/contact-details.js"></script>
+</body>

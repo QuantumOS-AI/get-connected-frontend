@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Get Connected</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+    <!-- _________ start header/sidemenu area _________ -->
+    <header id="hamburger-menu" class="hamburger-menu">
+        <div class="flex flex-col max-h-full">
+            <div class="p-4 gradient-bg text-white relative mb-3">
+                <div class="flex items-center">
+                    <div id="profile-avatar" class="avatar avatar-large">
+                        <img class="rounded-full object-cover" src="assets/img/profile.png" alt="profile">
+                    </div>
+                    <div class="ml-4">
+                        <h3 id="menu-username" class="text-lg font-semibold">User Name</h3>
+                        <p id="menu-company" class="text-sm opacity-80">Company Name</p>
+                    </div>
+                </div>
+
+                <div class="xl_hidden absolute top-4 right-4">
+                    <button class="menu-icon" type="button" onclick="toggleMenu()">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="overflow-x-auto">
+                <ul class="menu-list">
+                    <li class="menu-item">
+                        <a class="menu-link active" href="index.html">
+                            <i class="fas fa-home"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="profile-settings.html">
+                            <i class="fas fa-user"></i>
+                            <span>Profile</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="company-settings.html">
+                            <i class="fas fa-building"></i>
+                            <span>Company Settings</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="change-password.html">
+                            <i class="fas fa-lock"></i>
+                            <span>Change Password</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="set-time-zone.html">
+                            <i class="fas fa-globe"></i>
+                            <span>Set Time Zone</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="notification-settings.html">
+                            <i class="fas fa-bell"></i>
+                            <span>Notifications</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="logout.html">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </header>
+    <div id="overlay" class="overlay"></div>
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <i class="fas fa-check-circle mr-2"></i>
+        <span id="toast-message">Operation successful!</span>
+    </div>
+    <!-- _________ end header/sidemenu area _________ -->
+
+    <!-- _________ start main area _________ -->
+    <main class="main">
+        <!-- ....... start top header section ....... -->
+        <section class=" top_header gradient-bg">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center">
+                    <div class="mr-3">
+                        <a class="" href="index.html">
+                            <i class="fa-solid fa-arrow-left"></i>
+                        </a>
+                    </div>
+                    <h1 class="text-xl font-bold">Estimates</h1>
+                </div>
+                <div class="flex items-center">
+                    <a class="mr-4 relative" id="notification-bell" href="notifications.html">
+                        <i class="fas fa-bell text-xl"></i>
+                        <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">3</span>
+                    </a>
+                    <a id="header-avatar" class="avatar" href="profile-settings.html">
+                        <img class="size-10 rounded-full object-cover" src="assets/img/profile.png" alt="profile">
+                    </a>
+                </div>
+            </div>
+        </section>
+        <!-- ....... end top header section ....... -->
+
+        <!-- ....... start stats section ....... -->
+        <section>
+            <div class="container mx-auto px-4 py-6">
+                <div class="tab-container">
+                    <div class="tab active" data-tab="active-estimates">Active Estimates</div>
+                    <div class="tab" data-tab="converted-estimates">Converted</div>
+                    <div class="tab" data-tab="estimates-reports">Reports</div>
+                </div>
+    
+                <div id="active-estimates" class="tab-content active">
+                    <div class="flex justify-between items-center mb-4">
+                        <input type="text" class="app-input w-full" placeholder="Search estimates...">
+                    </div>
+    
+                    <div class="job-card">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-semibold">Full House Painting</h3>
+                            <a class="app-btn-outline text-xs py-1 px-2" href="#">See Bid</a>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 text-sm mb-2">
+                            <div>
+                                <p class="text-gray-600">Lead:</p>
+                                <p id="estimate-lead-name"></p>
+                            </div>
+                            <div>
+                                <p class="text-gray-600">Address:</p>
+                                <pid="estimate-address"></p>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 text-sm">
+                            <div>
+                                <p class="text-gray-600">Proposed Start:</p>
+                                <p id=" id="estimate-start-date""></p>
+                            </div>
+                            <div>
+                                <p class="text-gray-600">Bid Amount:</p>
+                                <p class="font-semibold" id="estimate-bid-amount"></p>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <p class="text-gray-600 text-sm">Scope:</p>
+                            <p class="text-sm" id="id="estimate-scope""></p>
+                        </div>
+                    </div>
+    
+                    <!-- <div class="job-card">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-semibold">Backyard Landscaping</h3>
+                            <a class="app-btn-outline text-xs py-1 px-2" href="#">See Bid</a>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 text-sm mb-2">
+                            <div>
+                                <p class="text-gray-600">Lead:</p>
+                                <p>Thomas Green</p>
+                            </div>
+                            <div>
+                                <p class="text-gray-600">Address:</p>
+                                <p>953 Canyon Way, Scottsdale, AZ</p>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 text-sm">
+                            <div>
+                                <p class="text-gray-600">Proposed Start:</p>
+                                <p>Jun 05, 2023</p>
+                            </div>
+                            <div>
+                                <p class="text-gray-600">Bid Amount:</p>
+                                <p class="font-semibold">$8,250</p>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <p class="text-gray-600 text-sm">Scope:</p>
+                            <p class="text-sm">New desert landscaping design, drip irrigation system, and decorative rock installation.</p>
+                        </div>
+                    </div>
+    
+                    <div class="job-card">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-semibold">Bathroom Remodel</h3>
+                            <a class="app-btn-outline text-xs py-1 px-2" href="#">See Bid</a>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 text-sm mb-2">
+                            <div>
+                                <p class="text-gray-600">Lead:</p>
+                                <p>Daniel Martinez</p>
+                            </div>
+                            <div>
+                                <p class="text-gray-600">Address:</p>
+                                <p>741 River Dr, Tempe, AZ</p>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 text-sm">
+                            <div>
+                                <p class="text-gray-600">Proposed Start:</p>
+                                <p>Jun 20, 2023</p>
+                            </div>
+                            <div>
+                                <p class="text-gray-600">Bid Amount:</p>
+                                <p class="font-semibold">$12,500</p>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <p class="text-gray-600 text-sm">Scope:</p>
+                            <p class="text-sm">Complete master bathroom renovation including new tile, fixtures, vanity, and glass shower enclosure.</p>
+                        </div>
+                    </div>
+                </div> --> 
+    
+                <div id="converted-estimates" class="tab-content hidden">
+                    <div class="flex justify-between items-center mb-4">
+                        <input type="text" class="app-input w-full" placeholder="Search converted estimates...">
+                    </div>
+    
+                    <div class="job-card">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-semibold">Roof Replacement</h3>
+                            <a class="app-btn-outline text-xs py-1 px-2" href="#">View Job</a>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 text-sm mb-2">
+                            <div>
+                                <p class="text-gray-600">Client:</p>
+                                <p>Lisa Thompson</p>
+                            </div>
+                            <div>
+                                <p class="text-gray-600">Address:</p>
+                                <p>369 Highland Ave, Mesa, AZ</p>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 text-sm">
+                            <div>
+                                <p class="text-gray-600">Estimate Date:</p>
+                                <p>Apr 12, 2023</p>
+                            </div>
+                            <div>
+                                <p class="text-gray-600">Accepted Amount:</p>
+                                <p class="font-semibold">$14,750</p>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="job-card">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-semibold">Driveway Extension</h3>
+                            <a class="app-btn-outline text-xs py-1 px-2" href="#">View Job</a>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 text-sm mb-2">
+                            <div>
+                                <p class="text-gray-600">Client:</p>
+                                <p>Kevin Anderson</p>
+                            </div>
+                            <div>
+                                <p class="text-gray-600">Address:</p>
+                                <p>852 Desert View Rd, Chandler, AZ</p>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 text-sm">
+                            <div>
+                                <p class="text-gray-600">Estimate Date:</p>
+                                <p>Apr 28, 2023</p>
+                            </div>
+                            <div>
+                                <p class="text-gray-600">Accepted Amount:</p>
+                                <p class="font-semibold">$5,200</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    
+                <div id="estimates-reports" class="tab-content hidden">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="stat-card">
+                            <div class="stat-label">Estimates Created (30d)</div>
+                            <div class="stat-value">24</div>
+                            <div class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i> 5 from previous 30 days
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Total Bids Value</div>
+                            <div class="stat-value">$187k</div>
+                            <div class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i> 15% from previous 30 days
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Close Rate</div>
+                            <div class="stat-value">32%</div>
+                            <div class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i> 3% from previous 30 days
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Avg. Response Time</div>
+                            <div class="stat-value">1.2 days</div>
+                            <div class="stat-change positive">
+                                <i class="fas fa-arrow-down"></i> 0.3 days from previous 30 days
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="chart-container">
+                        <h3 class="font-semibold mb-2">Estimate Performance</h3>
+                        <!-- Placeholder for chart -->
+                        <div class="h-full flex items-center justify-center">
+                            <div class="w-full h-40 bg-gray-100 rounded flex items-center justify-center">
+                                <i class="fas fa-chart-pie text-gray-400 mr-2"></i>
+                                <span class="text-gray-400">Conversion Rate Chart</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- ....... end stats section ....... -->
+    </main>
+    <!-- _________ end main area _________ -->
+
+    <!-- scripts -->
+    <script src="assets/js/common.js"></script>
+    <script src="assets/js/estimates.js"></script>
+</body>

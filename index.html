@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Get Connected</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<script>
+    // Added contact API
+function getContacts(event) {
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      alert('You need to be logged in to view contacts.');
+      return;
+    }
+
+    contact_res=fetch('https://get-connected-backend.dev.quantumos.ai/api/contacts', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(contact_data => {
+      console.log('Contacts data:', contact_data);
+      // Optional: Navigate to contacts page or render data
+      localStorage.setItem('contactInfo', JSON.stringify(contact_data));
+      window.location.href = 'contact.html'; 
+    //   navigateTo('contacts',contact_data);
+    })
+    .catch(error => {
+      console.error('Error fetching contacts:', error);
+    });
+   
+  }
+</script>
+
+<body>
+    <!-- _________ start header/sidemenu area _________ -->
+    <header id="hamburger-menu" class="hamburger-menu">
+        <div class="flex flex-col max-h-full">
+            <div class="p-4 gradient-bg text-white relative mb-3">
+                <div class="flex items-center">
+                    <div id="profile-avatar" class="avatar avatar-large">
+                        <img class="rounded-full object-cover" src="assets/img/profile.png" alt="profile">
+                    </div>
+                    <div class="ml-4">
+                        <h3 id="menu-username" class="text-lg font-semibold">User Name</h3>
+                        <p id="menu-company" class="text-sm opacity-80">Company Name</p>
+                    </div>
+                </div>
+
+                <div class="xl_hidden absolute top-4 right-4">
+                    <button class="menu-icon" type="button" onclick="toggleMenu()">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="overflow-x-auto">
+                <ul class="menu-list">
+                    <li class="menu-item">
+                        <a class="menu-link active" href="index.html">
+                            <i class="fas fa-home"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="profile-settings.html">
+                            <i class="fas fa-user"></i>
+                            <span>Profile</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="company-settings.html">
+                            <i class="fas fa-building"></i>
+                            <span>Company Settings</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="change-password.html">
+                            <i class="fas fa-lock"></i>
+                            <span>Change Password</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="set-time-zone.html">
+                            <i class="fas fa-globe"></i>
+                            <span>Set Time Zone</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="notification-settings.html">
+                            <i class="fas fa-bell"></i>
+                            <span>Notifications</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="logout.html">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </header>
+    <div id="overlay" class="overlay"></div>
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <i class="fas fa-check-circle mr-2"></i>
+        <span id="toast-message">Operation successful!</span>
+    </div>
+    <!-- _________ end header/sidemenu area _________ -->
+
+    <!-- _________ start main area _________ -->
+    <main class="main">
+        <!-- ....... start top header section ....... -->
+        <section class=" top_header gradient-bg">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center">
+                    <div class="xl_hidden mr-4">
+                        <button class="menu-icon" type="button" onclick="toggleMenu()">
+                            <i class="fa-solid fa-bars"></i>
+                        </button>
+                    </div>
+                    <h1 class="text-xl font-bold">Get Connected</h1>
+                </div>
+                <div class="flex items-center">
+                    <a class="mr-4 relative" id="notification-bell" href="notifications.html">
+                        <i class="fas fa-bell text-xl"></i>
+                        <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">3</span>
+                    </a>
+                    <a id="header-avatar" class="avatar" href="profile-settings.html">
+                        <img class="size-10 rounded-full object-cover" src="assets/img/profile.png" alt="profile">
+                    </a>
+                </div>
+            </div>
+        </section>
+        <!-- ....... end top header section ....... -->
+
+        <!-- ....... start stats section ....... -->
+        <section>
+            <div class="container mx-auto px-4 py-6">
+                <h2 class="text-2xl font-bold mb-2">Welcome, <span id="user-name"></span></h2>
+                <!-- <button class="menu-icon" type="button" onclick="getJobs()">
+                    <i class="fa-solid fa-xmark"></i>
+                </button> -->
+                <p class="text-gray-600 mb-6">Here's your business at a glance</p>
+
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <a class="dashboard-tile ai-tile text-white" href="ai-assistant.html">
+                        <i class="fas fa-robot text-2xl mb-2"></i>
+                        <span class="font-semibold">AI Assistant</span>
+                    </a>
+                    <a href="#" class="dashboard-tile jobs-tile text-white" href="jobs.html" onclick="getJobs(event)">
+                        <i class="fas fa-briefcase text-2xl mb-2"></i>
+                        <span class="font-semibold">Jobs</span>
+                    </a>
+                   
+                    <a class="dashboard-tile estimates-tile text-white" href="#" onclick="getEstimates(event)">
+                        <i class="fas fa-file-invoice-dollar text-2xl mb-2"></i>
+                        <span class="font-semibold">Estimates</span>
+                    </a>
+                    <a class="dashboard-tile calendar-tile text-white" href="calender.html" onclick="getCalenderEvent(event)">
+                        <i class="fas fa-calendar-alt text-2xl mb-2"></i>
+                        <span class="font-semibold">Calendar</span>
+                    </a>
+                </div>
+
+                <div>
+                    <a href="#" class="app-btn w-full flex justify-center items-center py-3 mb-6" href="contacts.html" onclick="getContacts(event)">
+                        <i class="fas fa-address-book mr-2"></i>
+                        <span>Contacts</span>
+                    </a>
+                </div>
+
+                <div class="stat-card mb-4">
+                    <div class="flex justify-between items-center">
+                        <h3 class="font-semibold">Today's Schedule</h3>
+                        <a class="text-purple-600 text-sm" href="calender.html">View All</a>
+                    </div>
+                    <div class="mt-4">
+                        <div class="flex items-center p-2 border-b border-gray-100">
+                            <div class="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                            <span class="text-sm mr-auto">Meeting with Client A</span>
+                            <span class="text-xs text-gray-500">10:00 AM</span>
+                        </div>
+                        <div class="flex items-center p-2 border-b border-gray-100">
+                            <div class="w-2 h-2 bg-purple-500 rounded-full mr-2"></div>
+                            <span class="text-sm mr-auto">Site Visit - Project B</span>
+                            <span class="text-xs text-gray-500">1:30 PM</span>
+                        </div>
+                        <div class="flex items-center p-2">
+                            <div class="w-2 h-2 bg-blue-500 rounded-full mr-2"></div>
+                            <span class="text-sm mr-auto">Team Check-in</span>
+                            <span class="text-xs text-gray-500">4:00 PM</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="stat-card">
+                        <div class="stat-label">Active Jobs</div>
+                        <div class="stat-value">12</div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i> 3 from last week
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Pending Estimates</div>
+                        <div class="stat-value">8</div>
+                        <div class="stat-change negative">
+                            <i class="fas fa-arrow-down"></i> 2 from last week
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- ....... end stats section ....... -->
+    </main>
+    <!-- _________ end main area _________ -->
+
+    <!-- scripts -->
+    <script src="assets/js/common.js"></script>
+    <script src="assets/js/index.js"></script>
+</body>

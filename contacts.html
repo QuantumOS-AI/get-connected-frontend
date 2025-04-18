@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Get Connected</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+    <!-- _________ start header/sidemenu area _________ -->
+    <header id="hamburger-menu" class="hamburger-menu">
+        <div class="flex flex-col max-h-full">
+            <div class="p-4 gradient-bg text-white relative mb-3">
+                <div class="flex items-center">
+                    <div id="profile-avatar" class="avatar avatar-large">
+                        <img class="rounded-full object-cover" src="assets/img/profile.png" alt="profile">
+                    </div>
+                    <div class="ml-4">
+                        <h3 id="menu-username" class="text-lg font-semibold">User Name</h3>
+                        <p id="menu-company" class="text-sm opacity-80">Company Name</p>
+                    </div>
+                </div>
+
+                <div class="xl_hidden absolute top-4 right-4">
+                    <button class="menu-icon" type="button" onclick="toggleMenu()">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="overflow-x-auto">
+                <ul class="menu-list">
+                    <li class="menu-item">
+                        <a class="menu-link active" href="index.html">
+                            <i class="fas fa-home"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="profile-settings.html">
+                            <i class="fas fa-user"></i>
+                            <span>Profile</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="company-settings.html">
+                            <i class="fas fa-building"></i>
+                            <span>Company Settings</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="change-password.html">
+                            <i class="fas fa-lock"></i>
+                            <span>Change Password</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="set-time-zone.html">
+                            <i class="fas fa-globe"></i>
+                            <span>Set Time Zone</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="notification-settings.html">
+                            <i class="fas fa-bell"></i>
+                            <span>Notifications</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="logout.html">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </header>
+    <div id="overlay" class="overlay"></div>
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <i class="fas fa-check-circle mr-2"></i>
+        <span id="toast-message">Operation successful!</span>
+    </div>
+    <!-- _________ end header/sidemenu area _________ -->
+
+    <!-- _________ start main area _________ -->
+    <main class="main">
+        <!-- ....... start top header section ....... -->
+        <section class=" top_header gradient-bg">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center">
+                    <div class="mr-3">
+                        <a class="" href="index.html">
+                            <i class="fa-solid fa-arrow-left"></i>
+                        </a>
+                    </div>
+                    <h1 class="text-xl font-bold">Contact</h1>
+                </div>
+                <div class="flex items-center">
+                    <a class="mr-4 relative" id="notification-bell" href="notifications.html">
+                        <i class="fas fa-bell text-xl"></i>
+                        <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">3</span>
+                    </a>
+                    <a id="header-avatar" class="avatar" href="profile-settings.html">
+                        <img class="size-10 rounded-full object-cover" src="assets/img/profile.png" alt="profile">
+                    </a>
+                </div>
+            </div>
+        </section>
+        <!-- ....... end top header section ....... -->
+
+        <!-- ....... start contacts section ....... -->
+        <section>
+            <div class="container mx-auto px-4 py-6">
+                <div class="flex justify-between items-center mb-4">
+                    <input type="text" class="app-input w-full" placeholder="Search contacts...">
+                    <button class="app-btn ml-2 whitespace-nowrap">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+    
+                <div class="mb-4">
+                    <div class="text-sm font-semibold text-gray-500 mb-2">A</div>
+                    <!-- <a class="contact-card" href="contact-details.html">
+                        <div class="avatar mr-3">KA</div>
+                        <div>
+                            <h4 class="font-semibold" id="contact-name"></h4>
+                            <p class="text-sm text-gray-600" id="contact-tags"></p>
+                        </div>
+                    </a> -->
+                    <a class="contact-card" href="contact-details.html">
+                        <div class="avatar mr-3" id="contact-name-initial"></div>
+                        <div>
+                            <h4 class="font-semibold"   id="contact-name-list"></h4>
+                            <p class="text-sm text-gray-600" id="contact-tags-list"></p>
+                          
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+        <!-- ....... end contacts section ....... -->
+    </main>
+    <!-- _________ end main area _________ -->
+
+    <!-- scripts -->
+    <script src="assets/js/common.js"></script>
+    <script src="assets/js/contacts.js"></script>
+</body>
