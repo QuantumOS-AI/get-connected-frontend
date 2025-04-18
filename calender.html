@@ -1,0 +1,181 @@
+
+
+<!-- new calender code -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Get Connected</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+
+<body>
+  <!-- _________ start header/sidemenu area _________ -->
+  <header id="hamburger-menu" class="hamburger-menu">
+    <div class="flex flex-col max-h-full">
+      <div class="p-4 gradient-bg text-white relative mb-3">
+        <div class="flex items-center">
+          <div id="profile-avatar" class="avatar avatar-large">
+            <img class="rounded-full object-cover" src="assets/img/profile.png" alt="profile" />
+          </div>
+          <div class="ml-4">
+            <h3 id="menu-username" class="text-lg font-semibold">User Name</h3>
+            <p id="menu-company" class="text-sm opacity-80">Company Name</p>
+          </div>
+        </div>
+        <div class="xl_hidden absolute top-4 right-4">
+          <button class="menu-icon" type="button" onclick="toggleMenu()">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+      </div>
+      <div class="overflow-x-auto">
+        <ul class="menu-list">
+          <li class="menu-item">
+            <a class="menu-link active" href="index.html">
+              <i class="fas fa-home"></i>
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li class="menu-item">
+            <a class="menu-link" href="profile-settings.html">
+              <i class="fas fa-user"></i>
+              <span>Profile</span>
+            </a>
+          </li>
+          <li class="menu-item">
+            <a class="menu-link" href="company-settings.html">
+              <i class="fas fa-building"></i>
+              <span>Company Settings</span>
+            </a>
+          </li>
+          <li class="menu-item">
+            <a class="menu-link" href="change-password.html">
+              <i class="fas fa-lock"></i>
+              <span>Change Password</span>
+            </a>
+          </li>
+          <li class="menu-item">
+            <a class="menu-link" href="set-time-zone.html">
+              <i class="fas fa-globe"></i>
+              <span>Set Time Zone</span>
+            </a>
+          </li>
+          <li class="menu-item">
+            <a class="menu-link" href="notification-settings.html">
+              <i class="fas fa-bell"></i>
+              <span>Notifications</span>
+            </a>
+          </li>
+          <li class="menu-item">
+            <a class="menu-link" href="logout.html">
+              <i class="fas fa-sign-out-alt"></i>
+              <span>Logout</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </header>
+
+  <div id="overlay" class="overlay"></div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast">
+    <i class="fas fa-check-circle mr-2"></i>
+    <span id="toast-message">Operation successful!</span>
+  </div>
+
+  <!-- _________ end header/sidemenu area _________ -->
+
+  <!-- _________ start main area _________ -->
+  <main class="main">
+    <!-- ....... start top header section ....... -->
+    <section class="top_header gradient-bg">
+      <div class="flex justify-between items-center">
+        <div class="flex items-center">
+          <div class="mr-3">
+            <a href="index.html">
+              <i class="fa-solid fa-arrow-left"></i>
+            </a>
+          </div>
+          <h1 class="text-xl font-bold">Calender</h1>
+        </div>
+        <div class="flex items-center">
+          <a class="mr-4 relative" id="notification-bell" href="notifications.html">
+            <i class="fas fa-bell text-xl"></i>
+            <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">3</span>
+          </a>
+          <a id="header-avatar" class="avatar" href="profile-settings.html">
+            <img class="size-10 rounded-full object-cover" src="assets/img/profile.png" alt="profile" />
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ....... calendar section ....... -->
+    <section>
+      <div class="container mx-auto px-4 py-6">
+        <div class="bg-white rounded-lg shadow-md p-4 mb-6">
+          <div class="flex justify-between items-center mb-4">
+            <button id="prevMonth" class="app-btn-outline text-xs py-1 px-2">
+              <i class="fas fa-chevron-left"></i>
+            </button>
+            <h3 id="monthYear" class="font-semibold">Month Year</h3>
+            <button id="nextMonth" class="app-btn-outline text-xs py-1 px-2">
+              <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+
+          <div class="grid grid-cols-7 gap-2 text-center text-sm mb-2">
+            <div>Sun</div>
+            <div>Mon</div>
+            <div>Tue</div>
+            <div>Wed</div>
+            <div>Thu</div>
+            <div>Fri</div>
+            <div>Sat</div>
+          </div>
+
+          <div id="calendarDays" class="grid grid-cols-7 gap-2 text-center mb-6">
+            <!-- Calendar day cells dynamically inserted via JS -->
+          </div>
+
+          <!-- Today's Schedule section OUTSIDE the calendar grid -->
+          <div class="mb-4">
+            <h3 class="font-semibold mb-3">Today's Schedule - May 10</h3>
+            <div class="bg-white rounded-lg shadow-sm p-3 mb-3">
+              <div class="flex items-start">
+                <div class="flex-shrink-0 w-12 text-center">
+                  <div class="text-sm font-semibold">10:00</div>
+                  <div class="text-xs">AM</div>
+                </div>
+                <div class="ml-4 flex-grow border-l-2 border-green-500 pl-3">
+                  <h4 class="font-semibold">Meeting with Client A</h4>
+                  <p class="text-sm text-gray-600">Project discussion and contract review</p>
+                  <div class="flex items-center mt-1 text-xs text-gray-500">
+                    <i class="fas fa-map-marker-alt mr-1"></i>
+                    <span>Office - Conference Room</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  </main>
+  <!-- _________ end main area _________ -->
+
+  <!-- scripts -->
+  <script src="assets/js/common.js"></script>
+  <script src="assets/js/calender.js"></script>
+</body>
+
+</html>
