@@ -1,11 +1,11 @@
 
-const aiInput = document.getElementById('ai-input');
+const messageInput = document.getElementById('message-input');
 const sendMessage = document.getElementById('send-message');
 const chatMessages = document.getElementById('chat-messages');
 
 // Add Event Listeners
 sendMessage.addEventListener('click', () => sendAiMessage());
-aiInput.addEventListener('keydown', (e) => {
+messageInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
         e.preventDefault(); // 
         sendAiMessage();
@@ -14,7 +14,7 @@ aiInput.addEventListener('keydown', (e) => {
 
 // Main send function
 async function sendAiMessage() {
-    const message = aiInput.value.trim();
+    const message = messageInput.value.trim();
     if (!message) return;
 
     // Add user message
@@ -25,7 +25,7 @@ async function sendAiMessage() {
     chatMessages.appendChild(userMessageElement);
 
     // Clear input
-    aiInput.value = '';
+    messageInput.value = '';
     chatMessages.scrollTop = chatMessages.scrollHeight;
 
   
@@ -83,4 +83,37 @@ async function sendAiMessage() {
         errorMessage.textContent = 'Error: ' + error.message;
         chatMessages.appendChild(errorMessage);
     }
+}
+
+
+// load converstaion 
+const coversationContainer=document.getElementById("coversation__container");
+const conversationItems=document.querySelectorAll(".conversation-item");
+const conversationTitle=document.getElementById("current-conversation-title");
+const conversationSubtitle=document.getElementById("current-conversation-subtitle");
+
+conversationItems.forEach((conversationItem)=>{
+    conversationItem.addEventListener("click",function(){
+        const conversationId=this.getAttribute('data-id');
+        resetActiveConversation();
+        this.classList.add("active");
+        showConversationInfo('@Alli','AI Assistant');
+        coversationContainer.classList.add("show__conversation");
+    })
+});
+function resetActiveConversation(){
+    conversationItems.forEach((conversationItem)=>{
+        conversationItem.classList.remove('active');
+    })
+}
+function showConversationInfo(title,subtitle){
+    conversationTitle.innerText=title;
+    conversationSubtitle.innerText=subtitle;
+} 
+function resetConversationInfo(){
+    conversationTitle.innerText="Select a conversation";
+    conversationSubtitle.innerText="";
+} 
+function showConversationList(){
+    coversationContainer.classList.remove("show__conversation");
 }
